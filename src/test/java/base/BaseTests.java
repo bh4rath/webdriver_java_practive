@@ -1,34 +1,30 @@
 package base;
 
-import java.util.List;
-
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+
+import webpages.HomePage;
 
 public class BaseTests {
-	private WebDriver driver;
 
+	private WebDriver driver;
+	protected HomePage homepage;
+
+	@BeforeClass
 	public void setUp() {
 		System.setProperty("webdriver.chrome.driver", "resources/chromedriver.exe");
+
 		driver = new ChromeDriver();
 		driver.get("https://the-internet.herokuapp.com/");
 		driver.manage().window().maximize();
 
-		WebElement inputs = driver.findElement(By.linkText("Shifting Content"));
-		inputs.click();
-
-		WebElement menuLink = driver.findElement(By.linkText("Example 1: Menu Element"));
-		menuLink.click();
-
-		List<WebElement> links = driver.findElements(By.tagName("li"));
-		System.out.println(links.size());
-
+		homepage = new HomePage(driver);
 	}
 
-	public static void main(String args[]) {
-		BaseTests test = new BaseTests();
-		test.setUp();
+	@AfterClass
+	public void quitDriver() {
+		driver.quit();
 	}
 }
